@@ -34,7 +34,7 @@ function routeByHosts(host) {
 async function handleRequest(request) {
   const url = new URL(request.url);
   const upstream = routeByHosts(url.hostname);
-  console.log("Upstream: ", upstream, "\n Url: ", url);
+  console.log("handleRequest Upstream: ", upstream, "\n xyzUrl: ", url);
   if (upstream === "") {
     return new Response(
       JSON.stringify({
@@ -60,7 +60,7 @@ async function handleRequest(request) {
       headers: headers,
       redirect: "follow",
     });
-    console.log("OriResponse: ",resp);
+    console.log("/v2/  ====>OriResponse:",resp.toString());
     if (resp.status === 401) {
       return responseUnauthorized(url);
     }
@@ -102,7 +102,7 @@ async function handleRequest(request) {
       pathParts.splice(2, 0, "library");
       const redirectUrl = new URL(url);
       redirectUrl.pathname = pathParts.join("/");
-      console.log("docker hub redirect url: ",redirectUrl);
+      console.log("docker hub redirect url: ===>",redirectUrl);
       return Response.redirect(redirectUrl, 301);
     }
   }
@@ -113,8 +113,8 @@ async function handleRequest(request) {
     headers: request.headers,
     redirect: "follow",
   });
-  console.log("转发请求到：",newUrl);
-  console.log("转发请求到请求：",newReq);
+  console.log("转发请求到地址：",newUrl);
+  console.log("转发请求到请求：",newReq.toString());
   const resp = await fetch(newReq);
   if (resp.status == 401) {
     console.log("转发的请求返回401了！")
