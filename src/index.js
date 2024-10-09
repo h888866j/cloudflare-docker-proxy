@@ -22,6 +22,7 @@ const routes = {
 
 function routeByHosts(host) {
   if (host in routes) {
+    console.log(routes[host]);
     return routes[host];
   }
   if (MODE == "debug") {
@@ -33,6 +34,7 @@ function routeByHosts(host) {
 async function handleRequest(request) {
   const url = new URL(request.url);
   const upstream = routeByHosts(url.hostname);
+  console.log("Upstream: ", upstream, "\n Url: ", url);
   if (upstream === "") {
     return new Response(
       JSON.stringify({
@@ -48,6 +50,7 @@ async function handleRequest(request) {
   if (url.pathname == "/v2/") {
     const newUrl = new URL(upstream + "/v2/");
     const headers = new Headers();
+    console.log("/v2/      ====>       ",newUrl);
     if (authorization) {
       headers.set("Authorization", authorization);
     }
@@ -57,6 +60,7 @@ async function handleRequest(request) {
       headers: headers,
       redirect: "follow",
     });
+    console.log("OriResponse: ",resp);
     if (resp.status === 401) {
       return responseUnauthorized(url);
     }
@@ -70,6 +74,7 @@ async function handleRequest(request) {
       redirect: "follow",
     });
     if (resp.status !== 401) {
+      console.log("get token func got 401");
       return resp;
     }
     const authenticateStr = resp.headers.get("WWW-Authenticate");
@@ -97,6 +102,7 @@ async function handleRequest(request) {
       pathParts.splice(2, 0, "library");
       const redirectUrl = new URL(url);
       redirectUrl.pathname = pathParts.join("/");
+      console.log("docker hub redirect url: ",redirectUrl);
       return Response.redirect(redirectUrl, 301);
     }
   }
@@ -107,8 +113,11 @@ async function handleRequest(request) {
     headers: request.headers,
     redirect: "follow",
   });
+  console.log("转发请求到：",newUrl);
+  console.log("转发请求到请求：",newReq);
   const resp = await fetch(newReq);
   if (resp.status == 401) {
+    console.log("转发的请求返回401了！")
     return responseUnauthorized(url);
   }
   return resp;
@@ -140,6 +149,7 @@ async function fetchToken(wwwAuthenticate, scope, authorization) {
   if (authorization) {
     headers.set("Authorization", authorization);
   }
+  console.log("fetch token url: ",url);
   return await fetch(url, { method: "GET", headers: headers });
 }
 
