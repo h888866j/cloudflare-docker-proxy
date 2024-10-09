@@ -7,7 +7,7 @@ port = 8787
 local_protocol = "http"
 
 [env.vars]
-CUSTOM_DOMAIN = "libcuda.so"
+CUSTOM_DOMAIN = "345188.xyz"
 
 [env.dev.vars]
 MODE = "debug"
@@ -36,3 +36,7 @@ name = "cloudflare-docker-proxy-staging"
 [env.staging.vars]
 MODE = "staging"
 TARGET_UPSTREAM = ""
+
+# wrangler.toml (wrangler v3.78.6^)
+[observability]
+enabled = true
