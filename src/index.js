@@ -33,6 +33,16 @@ function routeByHosts(host) {
 
 async function handleRequest(request) {
   const url = new URL(request.url);
+  if (url.toString().endsWith(".js") || url.toString().endsWith(".css") || url.toString().endsWith(".exe")||url.toString().endsWith(".zip")){
+    return new Response(
+      JSON.stringify({
+        error: "404",
+      }),
+      {
+        status: 404,
+      }
+    );
+  }
   const upstream = routeByHosts(url.hostname);
   console.log("handleRequest Upstream: ", upstream, "\n xyzUrl: ", url);
   if (upstream === "") {
