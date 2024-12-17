@@ -128,12 +128,14 @@ async function handleRequest(request) {
     redirect: "follow",
   });
   console.log("proxy to url: ",newUrl);
-  console.log("proxy to req: ",newReq.toString());
+  // console.log("proxy to req: ",newReq.toString());  
+  console.log("proxy to req - using headers Authorization: ",newReq.headers.get("Authorization"));
   const resp = await fetch(newReq);
   if (resp.status == 401) {
     console.log("转发的请求返回401了！")
     return responseUnauthorized(url);
   }
+  console.log("Not a 401, should be a successful request proxy");
   return resp;
 }
 
