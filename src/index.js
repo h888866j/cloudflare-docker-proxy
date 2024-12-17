@@ -136,6 +136,10 @@ async function handleRequest(request) {
     return responseUnauthorized(url);
   }
   console.log("Not a 401, should be a successful request proxy. ", resp.status);
+  if (resp.status > 320){
+    console.log("Headers", resp.headers);
+    console.log("Body: ", resp.body);
+  }
   return resp;
 }
 
