@@ -135,7 +135,7 @@ async function handleRequest(request) {
     console.log("转发的请求返回401了！")
     return responseUnauthorized(url);
   }
-  console.log("Not a 401, should be a successful request proxy");
+  console.log("Not a 401, should be a successful request proxy. ", resp.status);
   return resp;
 }
 
