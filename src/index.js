@@ -47,13 +47,15 @@ async function handleRequest(request) {
   }
   const isDockerHub = upstream == dockerHub;
   const authorization = request.headers.get("Authorization");
+  console.log("authorization Header in handleRequest: ",authorization);
   if (url.pathname == "/v2/") {
     const newUrl = new URL(upstream + "/v2/");
     const headers = new Headers();
-    console.log("/v2/      ====>       ",newUrl);
+    console.log("url.pathname == '/v2/'      ====>       ",newUrl);
     if (authorization) {
-      headers.set("Authorization", authorization);
-    }
+      headers.set("Authorization", authorization);    }
+    
+    console.log("authorization Header in handleRequest-->/v2/: ",authorization);
     // check if need to authenticate
     const resp = await fetch(newUrl.toString(), {
       method: "GET",
@@ -74,9 +76,11 @@ async function handleRequest(request) {
       redirect: "follow",
     });
     if (resp.status !== 401) {
-      console.log("get token func got 401");
+      console.log("url.pathname == '/v2/auth', get token fetch /v2/ is not 401");
       return resp;
-    }
+    }    
+    console.log("url.pathname == '/v2/auth', get token fetch /v2/ is 401 !!!! ");
+    console.log("authorization Header in handleRequest-->/v2/auth: ",authorization);
     const authenticateStr = resp.headers.get("WWW-Authenticate");
     if (authenticateStr === null) {
       return resp;
@@ -113,8 +117,8 @@ async function handleRequest(request) {
     headers: request.headers,
     redirect: "follow",
   });
-  console.log("转发请求到地址：",newUrl);
-  console.log("转发请求到请求：",newReq.toString());
+  console.log("proxy to url: ",newUrl);
+  console.log("proxy to req: ",newReq.toString());
   const resp = await fetch(newReq);
   if (resp.status == 401) {
     console.log("转发的请求返回401了！")
