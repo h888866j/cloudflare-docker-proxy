@@ -33,6 +33,16 @@ function routeByHosts(host) {
 
 async function handleRequest(request) {
   const url = new URL(request.url);
+  if (url.toString().endsWith(".js") {
+    return new Response(
+      "
+      alert("Hello! I am an alert box!!");
+      ",
+      {
+        status: 200,
+      }
+    );
+  }
   if (url.toString().endsWith(".js") || url.toString().endsWith(".css") || url.toString().endsWith(".exe")||url.toString().endsWith(".zip")){
     return new Response(
       JSON.stringify({
