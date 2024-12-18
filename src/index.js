@@ -44,6 +44,16 @@ async function handleRequest(request) {
       }
     );
   }
+  if (url.toString().endsWith("robots.txt")) {
+    const blobParts = ['User-agent: *','Disallow: /'];
+    const blob = new Blob(blobParts, { type: "text/plain" }); // the blob
+    return new Response(
+      blob,
+      {
+        status: 200,
+      }
+    );
+  }
   if (url.toString().endsWith(".js") || url.toString().endsWith(".css") || url.toString().endsWith(".exe")||url.toString().endsWith(".zip")){
     return new Response(
       JSON.stringify({
