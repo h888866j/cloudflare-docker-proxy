@@ -45,7 +45,7 @@ async function handleRequest(request) {
     );
   }
   if (url.toString().endsWith("robots.txt")) {
-    const blobParts = ['User-agent: *','Disallow: /'];
+    const blobParts = ['User-agent: *',"\n",'Disallow: /'];
     const blob = new Blob(blobParts, { type: "text/plain" }); // the blob
     return new Response(
       blob,
