@@ -140,6 +140,16 @@ async function handleRequest(request) {
     console.log("Headers", JSON.stringify(resp.headers));
     console.log("Body: ", JSON.stringify(resp.body));
   }
+  if (resp.status == 400){
+    for (i=0;i<3;i++){
+      console.log("400 Bad Request when requesting upstream, trying again...");
+      const resp_again = await fetch(newReq);
+      if (resp_again.status == 200){return resp_again}
+      if (resp_again.status == 401) {
+        console.log("request to upstream returns 401...ignoring it and try again")
+      }
+    }
+  }
   return resp;
 }
 
