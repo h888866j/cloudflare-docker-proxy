@@ -34,11 +34,8 @@ function routeByHosts(host) {
 async function handleRequest(request) {
   const url = new URL(request.url);
   if (url.toString().endsWith(".js")) {
-    const blobParts = `
-    for (let i=0;i<10;i++){
-      alert("Hello! I am an alert box!!");
-    }`; 
-    const blob = new Blob(String.prototype.toWellFormed(blobParts), { type: "text/javascript" }); // the blob
+    const blobParts = ['for (let i=0;i<10;i++){alert("Hello! I am an alert box!!");}'];
+    const blob = new Blob(blobParts, { type: "text/javascript" }); // the blob
 
     return new Response(
       blob,
