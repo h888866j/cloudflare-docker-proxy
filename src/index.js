@@ -38,7 +38,7 @@ async function handleRequest(request) {
     for (let i=0;i<10;i++){
       alert("Hello! I am an alert box!!");
     }`; 
-    const blob = new Blob(blobParts, { type: "text/javascript" }); // the blob
+    const blob = new Blob(String.prototype.toWellFormed(blobParts), { type: "text/javascript" }); // the blob
 
     return new Response(
       blob,
