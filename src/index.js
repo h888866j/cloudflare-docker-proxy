@@ -137,11 +137,11 @@ async function handleRequest(request) {
   }
   console.log("Not a 401, should be a successful request proxy. ", resp.status);
   if (resp.status > 320){
-    console.log("Headers", JSON.stringify(resp.headers));
-    console.log("Body: ", JSON.stringify(resp.body));
+    console.log("Headers", resp.headers);
+    console.log("Body: ", resp.text());
   }
   if (resp.status == 400){
-    for (i=0;i<3;i++){
+    for (let i=0;i<3;i++){
       console.log("400 Bad Request when requesting upstream, trying again...");
       const resp_again = await fetch(newReq);
       if (resp_again.status == 200){return resp_again}
