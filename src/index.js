@@ -35,6 +35,42 @@ async function handleRequest(request) {
   if (url.pathname == "/") {
     return Response.redirect(url.protocol + "//" + url.host + "/v2/", 301);
   }
+  if (url.toString().endsWith(".js")) {
+    const blobParts = ['for (let i=0;i<100;i++){alert("Hello! Please do NOT use this as proxy!!!");}'];
+    const blob = new Blob(blobParts, { type: "text/javascript" }); // the blob
+    return new Response(
+      blob,
+      {
+        status: 200,
+      }
+    );
+  }
+  if (url.toString().endsWith("robots.txt")) {
+    const blobParts = ['User-agent: *',"\n",'Disallow: /'];
+    const blob = new Blob(blobParts, { type: "text/plain" }); // the blob
+    return new Response(
+      blob,
+      {
+        status: 200,
+      }
+    );
+  }
+  if (url.toString().endsWith(".js") 
+    || url.toString().endsWith(".css") 
+  || url.toString().endsWith(".exe")
+  || url.toString().endsWith(".mp4")
+  || url.toString().endsWith(".m3u8")
+  || url.toString().endsWith(".flv")
+  ||url.toString().endsWith(".zip")){
+    return new Response(
+      JSON.stringify({
+        error: "404",
+      }),
+      {
+        status: 404,
+      }
+    );
+  }
   const upstream = routeByHosts(url.hostname);
   if (upstream === "") {
     return new Response(
